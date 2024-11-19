@@ -119,7 +119,7 @@ fn main() {
             shader_type: 6,
             orbit_radius: 4.0,
             rotation_speed: 0.05,
-            orbit_speed: 0.008,
+            orbit_speed: 0.015,
             scale: 1.0,
         },
         CelestialBody {
@@ -128,7 +128,7 @@ fn main() {
             shader_type: 5,
             orbit_radius: 5.0,
             rotation_speed: 0.045,
-            orbit_speed: 0.007,
+            orbit_speed: 0.0095,
             scale: 0.8,
         },
         CelestialBody {
@@ -137,7 +137,7 @@ fn main() {
             shader_type: 1,
             orbit_radius: 7.0,
             rotation_speed: 0.07,
-            orbit_speed: 0.006,
+            orbit_speed: 0.0085,
             scale: 1.5,
         },
         CelestialBody {
@@ -146,7 +146,7 @@ fn main() {
             shader_type: 4,
             orbit_radius: 3.0,
             rotation_speed: 0.01,
-            orbit_speed: 0.009,
+            orbit_speed: 0.03,
             scale: 0.9,
         },
         CelestialBody {
@@ -155,7 +155,7 @@ fn main() {
             shader_type: 7,
             orbit_radius: 2.0,
             rotation_speed: 0.02,
-            orbit_speed: 0.01,
+            orbit_speed: 0.05,
             scale: 0.5,
         },
     ];
