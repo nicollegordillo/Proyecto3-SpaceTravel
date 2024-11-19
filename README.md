@@ -53,5 +53,11 @@ Este proyecto es una simulación interactiva de un sistema solar renderizado en 
     ```bash
    cargo run
    ```
+---
+
 ## Video de Demostración 🎥
-https://youtu.be/qC4YBlNGlHg
+https://youtu.be/vopg9cGROj8
+
+## Screenshots
+![nomal view](https://github.com/nicollegordillo/Proyecto3-SpaceTravel/blob/master/assets/images/Captura%20de%20pantalla%202024-11-19%20172626.png)
+![bird view](https://github.com/nicollegordillo/Proyecto3-SpaceTravel/blob/master/assets/images/Captura%20de%20pantalla%202024-11-19%20172657.png)
