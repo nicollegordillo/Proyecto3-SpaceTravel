@@ -117,7 +117,7 @@ fn main() {
             name: String::from("Earth"),
             vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
             shader_type: 6,
-            orbit_radius: 2.0,
+            orbit_radius: 4.0,
             rotation_speed: 0.02,
             orbit_speed: 0.005,
             scale: 1.0,
@@ -126,12 +126,38 @@ fn main() {
             name: String::from("Mars"),
             vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
             shader_type: 5,
+            orbit_radius: 5.0,
+            rotation_speed: 0.03,
+            orbit_speed: 0.004,
+            scale: 0.8,
+        },
+        CelestialBody {
+            name: String::from("Jupiter"),
+            vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
+            shader_type: 1,
+            orbit_radius: 6.0,
+            rotation_speed: 0.02,
+            orbit_speed: 0.005,
+            scale: 1.0,
+        },
+        CelestialBody {
+            name: String::from("Venus"),
+            vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
+            shader_type: 4,
             orbit_radius: 3.0,
             rotation_speed: 0.03,
             orbit_speed: 0.004,
             scale: 0.8,
         },
-        // Add more planets here
+        CelestialBody {
+            name: String::from("Mercury"),
+            vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
+            shader_type: 7,
+            orbit_radius: 2.0,
+            rotation_speed: 0.02,
+            orbit_speed: 0.005,
+            scale: 1.0,
+        },
     ];
 
     let sun = CelestialBody {
