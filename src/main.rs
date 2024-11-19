@@ -172,6 +172,7 @@ fn main() {
     };
 
 
+
     let mut camera = Camera::new(
         Vec3::new(0.0, 0.0, 20.0),
         Vec3::new(0.0, 0.0, 0.0),
