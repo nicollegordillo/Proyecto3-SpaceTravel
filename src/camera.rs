@@ -1,11 +1,17 @@
 use nalgebra_glm::{Vec3, rotate_vec3};
 use std::f32::consts::PI;
 
+pub enum CameraMode {
+    Normal,
+    BirdsEye,
+}
+
 pub struct Camera {
   pub eye: Vec3,
   pub center: Vec3,
   pub up: Vec3,
-  pub has_changed: bool
+  pub has_changed: bool,
+  pub mode: CameraMode,
 }
 
 impl Camera {
@@ -15,8 +21,23 @@ impl Camera {
       center,
       up,
       has_changed: true,
+      mode: CameraMode::Normal,
     }
   }
+
+  pub fn switch_to_birds_eye(&mut self) {
+        self.eye = Vec3::new(0.0, 20.0, 0.0); // Set camera above the scene
+        self.center = Vec3::new(0.0, 0.0, 0.0); // Look at the origin
+        self.up = Vec3::new(0.0, 0.0, -1.0); // Adjust 'up' vector for downward view
+        self.mode = CameraMode::BirdsEye;
+    }
+
+    pub fn switch_to_normal(&mut self) {
+        self.eye = Vec3::new(0.0, 0.0, 20.0); // Reset to original position
+        self.center = Vec3::new(0.0, 0.0, 0.0);
+        self.up = Vec3::new(0.0, 1.0, 0.0);
+        self.mode = CameraMode::Normal;
+    }
 
   pub fn basis_change(&self, vector: &Vec3) -> Vec3 {
     let forward = (self.center - self.eye).normalize();

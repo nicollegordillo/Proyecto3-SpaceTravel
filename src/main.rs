@@ -270,4 +270,11 @@ fn handle_input(window: &Window, camera: &mut Camera){
     if window.is_key_down(Key::Down){
         camera.zoom(-zoom_speed);
     }
+
+    if window.is_key_pressed(Key::B, minifb::KeyRepeat::No) {
+        camera.switch_to_birds_eye();
+    }
+    if window.is_key_pressed(Key::N, minifb::KeyRepeat::No) {
+        camera.switch_to_normal();
+    }
 }
