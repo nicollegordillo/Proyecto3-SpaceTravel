@@ -118,8 +118,8 @@ fn main() {
             vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
             shader_type: 6,
             orbit_radius: 4.0,
-            rotation_speed: 0.02,
-            orbit_speed: 0.005,
+            rotation_speed: 0.05,
+            orbit_speed: 0.008,
             scale: 1.0,
         },
         CelestialBody {
@@ -127,27 +127,27 @@ fn main() {
             vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
             shader_type: 5,
             orbit_radius: 5.0,
-            rotation_speed: 0.03,
-            orbit_speed: 0.004,
+            rotation_speed: 0.045,
+            orbit_speed: 0.007,
             scale: 0.8,
         },
         CelestialBody {
             name: String::from("Jupiter"),
             vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
             shader_type: 1,
-            orbit_radius: 6.0,
-            rotation_speed: 0.02,
-            orbit_speed: 0.005,
-            scale: 1.0,
+            orbit_radius: 7.0,
+            rotation_speed: 0.07,
+            orbit_speed: 0.006,
+            scale: 1.5,
         },
         CelestialBody {
             name: String::from("Venus"),
             vertex_array: Obj::load("./assets/models/sphere.obj").unwrap().get_vertex_array(),
             shader_type: 4,
             orbit_radius: 3.0,
-            rotation_speed: 0.03,
-            orbit_speed: 0.004,
-            scale: 0.8,
+            rotation_speed: 0.01,
+            orbit_speed: 0.009,
+            scale: 0.9,
         },
         CelestialBody {
             name: String::from("Mercury"),
@@ -155,8 +155,8 @@ fn main() {
             shader_type: 7,
             orbit_radius: 2.0,
             rotation_speed: 0.02,
-            orbit_speed: 0.005,
-            scale: 1.0,
+            orbit_speed: 0.01,
+            scale: 0.5,
         },
     ];
 
@@ -172,7 +172,7 @@ fn main() {
 
 
     let mut camera = Camera::new(
-        Vec3::new(0.0, 0.0, 5.0),
+        Vec3::new(0.0, 0.0, 20.0),
         Vec3::new(0.0, 0.0, 0.0),
         Vec3::new(0.0, 1.0, 0.0)
     );
