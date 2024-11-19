@@ -12,6 +12,20 @@ pub struct Camera {
   pub up: Vec3,
   pub has_changed: bool,
   pub mode: CameraMode,
+
+
+  // Animation fields
+    anim_start_eye: Vec3,
+    anim_start_center: Vec3,
+    anim_target_eye: Vec3,
+    anim_target_center: Vec3,
+    anim_progress: f32,
+    anim_duration: f32,
+    is_animating: bool,
+}
+
+fn smooth_step(t: f32) -> f32 {
+    t * t * (3.0 - 2.0 * t) // Smoothstep easing
 }
 
 impl Camera {
@@ -22,8 +36,44 @@ impl Camera {
       up,
       has_changed: true,
       mode: CameraMode::Normal,
+
+      // Initialize animation-related fields
+            anim_start_eye: eye,
+            anim_start_center: center,
+            anim_target_eye: eye,
+            anim_target_center: center,
+            anim_progress: 0.0,
+            anim_duration: 0.0,
+            is_animating: false,
     }
   }
+
+  pub fn start_warp(&mut self, target_eye: Vec3, target_center: Vec3, duration: f32) {
+        self.anim_start_eye = self.eye;
+        self.anim_start_center = self.center;
+        self.anim_target_eye = target_eye;
+        self.anim_target_center = target_center;
+        self.anim_progress = 0.0;
+        self.anim_duration = duration;
+        self.is_animating = true;
+ }
+
+pub fn update(&mut self, delta_time: f32) {
+        if self.is_animating {
+            self.anim_progress += delta_time / self.anim_duration;
+            if self.anim_progress >= 1.0 {
+                self.anim_progress = 1.0;
+                self.is_animating = false;
+            }
+
+            let t = smooth_step(self.anim_progress);
+
+            self.eye = self.anim_start_eye.lerp(&self.anim_target_eye, t);
+            self.center = self.anim_start_center.lerp(&self.anim_target_center, t);
+
+            self.has_changed = true;
+        }
+    }
 
   pub fn switch_to_birds_eye(&mut self) {
         self.eye = Vec3::new(0.0, 20.0, 0.0); // Set camera above the scene

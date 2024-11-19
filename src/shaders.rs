@@ -39,11 +39,6 @@ pub fn vertex_shader(vertex: &Vertex, uniforms: &Uniforms) -> Vertex {
 	}
 }
 
-pub fn fragment_shader_urano(fragment: &Fragment, uniforms: &Uniforms) -> Color {
-   let color = Color::new(189.0, 219.0, 208.0); 
-   color * fragment.intensity
-}
-
 pub fn fragment_shader_sun(fragment: &Fragment, uniforms: &Uniforms) -> Color {
     // Define the colors
     let white = Color::new(255.0, 255.0, 255.0);  // White center
@@ -104,41 +99,6 @@ pub fn fragment_shader_neptune(fragment: &Fragment, uniforms: &Uniforms) -> Colo
     blended_color * fragment.intensity
 }
 
-// fragment_shader_saturn_with_ring function
-pub fn fragment_shader_saturn_with_ring(fragment: &Fragment, uniforms: &Uniforms) -> Color {
-    // Base color for Saturn
-    let saturn_color = Color::new(210.0, 180.0, 140.0); 
-    // Ring color (make it bright to distinguish)
-    let ring_color = Color::new(255.0, 255.0, 255.0); 
-
-    // Define ring parameters
-    let ring_inner_radius = 0.48;  // Inner radius of the ring
-    let ring_outer_radius = 0.50; // Outer radius of the ring
-    let ring_z_offset = 0.55;     // Z offset for the flat ring (make sure this is small)
-
-    // Calculate distance from the center in the X-Y plane (ignore Z)
-    let distance_from_center = (fragment.vertex_position.x.powi(2) + fragment.vertex_position.z.powi(2)).sqrt();
-
-    // Check if we are in the ring's radius range
-    if distance_from_center >= ring_inner_radius && distance_from_center <= ring_outer_radius {
-        // Calculate the LERP factor based on the distance
-        let lerp_factor = (distance_from_center - ring_inner_radius) / (ring_outer_radius - ring_inner_radius);
-
-        // Interpolate between Saturn color and ring color using the lerp factor
-        let ring_color_lerp = saturn_color.lerp(&ring_color, lerp_factor);
-
-        // Return the interpolated color with fragment intensity
-        return ring_color_lerp * fragment.intensity;
-    }
-
-    // Return base Saturn color for other parts of the planet
-    saturn_color * fragment.intensity
-}
-
-fn smoothstep(edge0: f32, edge1: f32, x: f32) -> f32 {
-    let t = ((x - edge0) / (edge1 - edge0)).clamp(0.0, 1.0); // Clamp x between edge0 and edge1
-    t * t * (3.0 - 2.0 * t) // Smooth interpolation
-}
 
 pub fn fragment_shader_mars(fragment: &Fragment, _uniforms: &Uniforms) -> Color {
     // Mars base color (rusty red-orange)
@@ -221,6 +181,8 @@ pub fn fragment_shader_earth(fragment: &Fragment, uniforms: &Uniforms) -> Color 
         base_color
     };
 
+    let intensity = compute_lighting(fragment, uniforms.sun_position);
+
     final_color * fragment.intensity
 }
 
@@ -258,29 +220,11 @@ pub fn fragment_shader_mercury(fragment: &Fragment, _uniforms: &Uniforms) -> Col
     final_color * fragment.intensity
 }
 
-pub fn fragment_shader_moon(fragment: &Fragment, uniforms: &Uniforms) -> Color {
-    let base_color = Color::new(200.0, 200.0, 200.0); // Gray base color for the moon
-    let crater_color = Color::new(100.0, 100.0, 100.0); // Darker gray for craters
+pub fn compute_lighting(fragment: &Fragment, sun_position: Vec3) -> f32 {
+    let surface_normal = fragment.normal.normalize();
+    let sun_direction = (sun_position - fragment.vertex_position).normalize();
 
-    // Simple crater effect based on fragment position
-    let crater_intensity = ((fragment.vertex_position.x * 10.0).sin() * 
-                            (fragment.vertex_position.y * 10.0).sin()).abs();
-    
-    // Blend colors based on intensity
-    base_color.lerp(&crater_color, crater_intensity)
-}
-
-pub fn fragment_shader_ring(fragment: &Fragment, _uniforms: &Uniforms) -> Color {
-    // Base color for the ring (you can change this to match the color of Saturn's rings)
-    let ring_base_color = Color::new(200.0, 200.0, 200.0); // A light gray color, adjust as needed
-
-    // Apply a simple stripe effect based on the X or Z coordinate (you can adjust this for a different effect)
-    let stripe_frequency = 10.0;  // Adjust for more/less frequent stripes
-    let stripe_intensity = (fragment.vertex_position.x * stripe_frequency).sin() * 0.5 + 0.5;
-
-    // Combine the base color with the stripe intensity to add the stripe effect
-    let final_ring_color = ring_base_color * stripe_intensity;
-
-    // Apply fragment intensity and return the color for the ring
-    return final_ring_color * fragment.intensity;
+    // Calculate the dot product for light intensity
+    let intensity = surface_normal.dot(&sun_direction).max(0.0);
+    intensity
 }

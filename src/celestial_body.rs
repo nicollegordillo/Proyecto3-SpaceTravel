@@ -1,7 +1,7 @@
 use nalgebra_glm::{Mat4, Vec3};
 use crate::framebuffer::Framebuffer;
 use crate::{Uniforms, vertex::Vertex};
-use crate::shaders::{vertex_shader, fragment_shader_urano, fragment_shader_neptune, fragment_shader_jupiter, fragment_shader_saturn_with_ring, fragment_shader_venus, fragment_shader_mars, fragment_shader_earth, fragment_shader_mercury, fragment_shader_sun, fragment_shader_moon, fragment_shader_ring};
+use crate::shaders::{vertex_shader, fragment_shader_neptune, fragment_shader_jupiter, fragment_shader_venus, fragment_shader_mars, fragment_shader_earth, fragment_shader_mercury, fragment_shader_sun};
 
 pub struct CelestialBody {
     pub name: String,
@@ -27,6 +27,14 @@ impl CelestialBody {
         let rotation = Vec3::new(0.0, rotation_angle, 0.0);
 
         super::create_model_matrix(translation, self.scale, rotation)
+    }
+
+    pub fn get_world_position(&self) -> Vec3 {
+        Vec3::new(
+            self.orbit_radius * (self.orbit_speed * self.rotation_speed).cos(),
+            0.0,
+            self.orbit_radius * (self.orbit_speed * self.rotation_speed).sin(),
+        )
     }
 
     pub fn render(&self, framebuffer: &mut Framebuffer, uniforms: &Uniforms) {
@@ -58,15 +66,11 @@ impl CelestialBody {
             if x < framebuffer.width && y < framebuffer.height {
                 let shaded_color = match self.shader_type {
                     1 => fragment_shader_jupiter(&fragment, uniforms),
-                    2 => fragment_shader_saturn_with_ring(&fragment, uniforms),
-                    3 => fragment_shader_urano(&fragment, uniforms),
                     4 => fragment_shader_venus(&fragment, uniforms),
                     5 => fragment_shader_mars(&fragment, uniforms),
                     6 => fragment_shader_earth(&fragment, uniforms),
                     7 => fragment_shader_mercury(&fragment, uniforms),
                     8 => fragment_shader_sun(&fragment, uniforms),
-                    9 => fragment_shader_moon(&fragment, uniforms),
-                    10 => fragment_shader_ring(&fragment, uniforms),
                     _ => fragment_shader_neptune(&fragment, uniforms),
                 };
 

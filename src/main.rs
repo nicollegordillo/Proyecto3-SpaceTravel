@@ -17,7 +17,7 @@ use framebuffer::Framebuffer;
 use vertex::Vertex;
 use obj::Obj;
 use triangle::triangle;
-use shaders::{vertex_shader, fragment_shader_urano, fragment_shader_neptune, fragment_shader_jupiter, fragment_shader_saturn_with_ring, fragment_shader_venus, fragment_shader_mars, fragment_shader_earth, fragment_shader_mercury, fragment_shader_sun, fragment_shader_moon, fragment_shader_ring};
+use shaders::{vertex_shader, fragment_shader_neptune, fragment_shader_jupiter, fragment_shader_venus, fragment_shader_mars, fragment_shader_earth, fragment_shader_mercury, fragment_shader_sun};
 use camera::Camera;
 use celestial_body::CelestialBody;
 
@@ -27,6 +27,7 @@ pub struct Uniforms {
     projection_matrix: Mat4,
     viewport_matrix: Mat4,
     time: u32,
+    sun_position: Vec3,
 }
 
 fn create_model_matrix(translation: Vec3, scale: f32, rotation: Vec3) -> Mat4 {
@@ -183,17 +184,21 @@ fn main() {
 
     let projection_matrix = create_perspective_matrix(window_width as f32, window_height as f32);
     let viewport_matrix = create_viewport_matrix(framebuffer_width as f32, framebuffer_height as f32);
-
+    let sun_world_position = Vec3::new(0.0, 0.0, 0.0);
     while window.is_open() {
         if window.is_key_down(Key::Escape) {
             break;
         }
+
+        
         
         time += 1;
 
         framebuffer.clear();
 
-        handle_input(&window, &mut camera);
+        handle_input(&window, &mut camera, &planets);
+        let delta_time = frame_delay.as_secs_f32();
+        camera.update(delta_time);
 
         let view_matrix = create_view_matrix(camera.eye, camera.center, camera.up);
         for planet in &planets {
@@ -204,6 +209,7 @@ fn main() {
                 projection_matrix,
                 viewport_matrix,
                 time,
+                sun_position: sun_world_position,
             };
             planet.render(&mut framebuffer, &uniforms);
         }
@@ -216,6 +222,7 @@ fn main() {
             projection_matrix,
             viewport_matrix,
             time,
+            sun_position: sun_world_position,
         };
         sun.render(&mut framebuffer, &sun_uniforms);
        
@@ -229,10 +236,60 @@ fn main() {
     }
 }
 
-fn handle_input(window: &Window, camera: &mut Camera){
+fn handle_input(window: &Window, camera: &mut Camera, planets: &[CelestialBody]){
     let movement_speed= 1.0;
     let rotation_speed = PI/50.0;
     let zoom_speed = 0.1;
+
+    if window.is_key_pressed(Key::Key1, minifb::KeyRepeat::No) {
+        // Earth
+        let planet = &planets[0];
+        camera.start_warp(
+            planet.get_world_position() + Vec3::new(0.0, 2.0, 10.0), // Offset for viewing
+            planet.get_world_position(),
+            2.0, // 2-second animation
+        );
+    }
+
+    if window.is_key_pressed(Key::Key2, minifb::KeyRepeat::No) {
+        // Marte
+        let planet = &planets[1];
+        camera.start_warp(
+            planet.get_world_position() + Vec3::new(0.0, 2.0, 10.0), // Offset for viewing
+            planet.get_world_position(),
+            2.0, // 2-second animation
+        );
+    }
+
+    if window.is_key_pressed(Key::Key3, minifb::KeyRepeat::No) {
+        // Jupiter
+        let planet = &planets[2];
+        camera.start_warp(
+            planet.get_world_position() + Vec3::new(0.0, 2.0, 10.0), // Offset for viewing
+            planet.get_world_position(),
+            2.0, // 2-second animation
+        );
+    }
+
+    if window.is_key_pressed(Key::Key4, minifb::KeyRepeat::No) {
+        // Venus
+        let planet = &planets[3];
+        camera.start_warp(
+            planet.get_world_position() + Vec3::new(0.0, 2.0, 10.0), // Offset for viewing
+            planet.get_world_position(),
+            2.0, // 2-second animation
+        );
+    }
+
+    if window.is_key_pressed(Key::Key5, minifb::KeyRepeat::No) {
+        // Mercurio
+        let planet = &planets[4];
+        camera.start_warp(
+            planet.get_world_position() + Vec3::new(0.0, 2.0, 10.0), // Offset for viewing
+            planet.get_world_position(),
+            2.0, // 2-second animation
+        );
+    }
 
     if window.is_key_down(Key::Left){
         camera.orbit(rotation_speed, 0.0);
